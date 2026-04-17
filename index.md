@@ -65,7 +65,7 @@ views:
     <video width="100%" controls>
       <source src="videos/room_video.mp4" type="video/mp4">
     </video>
-    <p><a href="videos/room_video.mp4">▶ Watch / Download</a></p>
+    <p><a href="videos/energy_graph.mp4">▶ Watch / Download</a></p>
   </div>
 
   ---
