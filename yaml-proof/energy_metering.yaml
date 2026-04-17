@@ -1,0 +1,523 @@
+views:
+  - title: Home
+    sections:
+      - type: grid
+        cards:
+          - type: custom:mushroom-title-card
+            grid_options:
+              columns: 36
+              rows: 0.7
+          - type: vertical-stack
+            cards:
+              - type: custom:energy-period-selector-plus
+                card_background: false
+                today_button: true
+                prev_next_buttons: true
+                compare_button_type: ''
+                today_button_type: false
+                period_buttons: []
+              - type: energy-usage-graph
+            card_mod:
+              style: |
+                ha-card {
+                  background-color: #2c3034;
+                }  
+            grid_options:
+              columns: 18
+              rows: 5
+          - type: custom:mushroom-title-card
+            grid_options:
+              columns: 8
+              rows: 0.9
+          - type: custom:power-flow-card-plus
+            entities:
+              battery:
+                entity: ''
+                state_of_charge: sensor.moto_g_60_battery_level
+              grid:
+                entity: sensor.office_power_bescom
+                invert_state: false
+                color_value: true
+                color_icon: true
+                color_circle: true
+                display_zero_tolerance: 0
+                display_state: one_way
+                power_outage: {}
+                color_value_template: |
+                  {% if states('sensor.dg_sensing_raw')|int(0) == 0 %}
+                    "#00FF00"   # green when active
+                  {% else %}
+                    "#808080"   # grey when inactive
+                  {% endif %}
+                color_icon_template: |
+                  {% if states('sensor.dg_sensing_raw')|int(0) == 0 %}
+                    "#00FF00"
+                  {% else %}
+                    "#808080"
+                  {% endif %}
+              individual:
+                - entity: sensor.office_power_dg
+                  name: DG
+                  inverted_animation: true
+                  display_zero: true
+                  color_value_template: |
+                    {% if states('sensor.dg_sensing_raw')|int(0) == 1 %}
+                      "#00FF00"   # green when active
+                    {% else %}
+                      "#808080"   # grey when inactive
+                    {% endif %}
+                  color_icon_template: |
+                    {% if states('sensor.dg_sensing_raw')|int(0) == 1 %}
+                      "#00FF00"
+                    {% else %}
+                      "#808080"
+                    {% endif %}
+                  show_direction: false
+                  unit_white_space: true
+                  secondary_info: {}
+                  icon: mdi:generator-stationary
+                  color_value: false
+                  color_icon: true
+                  display_zero_state: true
+                  calculate_flow_rate: false
+                  use_metadata: false
+                  display_zero_tolerance: 0
+                  color:
+                    - 184
+                    - 86
+                    - 86
+            clickable_entities: false
+            display_zero_lines:
+              mode: custom
+              transparency: 50
+              grey_color:
+                - 245
+                - 244
+                - 244
+            use_new_flow_rate_model: true
+            w_decimals: 0
+            kw_decimals: 1
+            min_flow_rate: 0.75
+            max_flow_rate: 6
+            max_expected_power: 2000
+            min_expected_power: 0.01
+            watt_threshold: 1000
+            transparency_zero_lines: 0
+            sort_individual_devices: false
+            card_mod:
+              style: |
+                ha-card {
+                  background-color: #1c1c1c;
+                }
+            grid_options:
+              columns: 17
+              rows: 4.3
+          - type: history-graph
+            entities:
+              - entity: sensor.selec_average_voltage_l_n
+            grid_options:
+              rows: 6
+              columns: 17
+            min_y_axis: 225
+            max_y_axis: 255
+            fit_y_data: false
+            card_mod:
+              style: |
+                ha-card {
+                  background-color: #1c1c1c;
+                }
+          - type: custom:mod-card
+            card_mod:
+              style: |
+                ha-card {
+                  background-color: #1c1c1c;
+                  padding: 1px !important;
+                  border-radius: 8px;
+                  width: 300px !important;     # 👈 Same as DG Fuel card
+                  margin: 0 auto;              # Centers the card
+                }
+            card:
+              type: vertical-stack
+              cards:
+                - type: custom:mushroom-title-card
+                  title: 💡 BESCOM
+                  card_mod:
+                    style: |
+                      ha-card {
+                        background-color: #2c3034;
+                        color: #ff8975;
+                        border-radius: 6px;
+                        padding: 3px !important;        # Matches DG card
+                        font-size: 13px !important;
+                        text-align: center;
+                      }
+                - type: horizontal-stack
+                  cards:
+                    - type: custom:mushroom-template-card
+                      primary: Daily
+                      secondary: ₹{{ states('sensor.office_power_cost_daily') }}
+                      icon: mdi:calendar-today
+                      icon_color: blue
+                      layout: vertical
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background-color: #2c3034;
+                            border-radius: 6px;
+                            padding: 3px !important;
+                            --card-primary-font-size: 13px;
+                            --card-secondary-font-size: 9px;
+                            --icon-size: 18px;
+                          }
+                    - type: custom:mushroom-template-card
+                      primary: Weekly
+                      secondary: ₹{{ states('sensor.office_power_cost_weekly') }}
+                      icon: mdi:calendar-week
+                      icon_color: green
+                      layout: vertical
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background-color: #2c3034;
+                            border-radius: 6px;
+                            padding: 3px !important;
+                            --card-primary-font-size: 13px;
+                            --card-secondary-font-size: 9px;
+                            --icon-size: 18px;
+                          }
+                    - type: custom:mushroom-template-card
+                      primary: Monthly
+                      secondary: ₹{{ states('sensor.office_power_cost_monthly') }}
+                      icon: mdi:calendar-month
+                      icon_color: purple
+                      layout: vertical
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background-color: #2c3034;
+                            border-radius: 6px;
+                            padding: 3px !important;
+                            --card-primary-font-size: 13px;
+                            --card-secondary-font-size: 9px;
+                            --icon-size: 18px;
+                          }
+            grid_options:
+              columns: 9
+              rows: 2.5
+          - type: custom:mod-card
+            card_mod:
+              style: |
+                ha-card {
+                  background-color: #1c1c1c;
+                  padding: 1px !important;
+                  border-radius: 8px;
+                  width: 300px !important;     # 👈 Reduced width (was 250px)
+                  margin: 0 auto;              # Centers the card
+                }
+            card:
+              type: vertical-stack
+              cards:
+                - type: custom:mushroom-title-card
+                  title: ⛽ DG Fuel
+                  card_mod:
+                    style: |
+                      ha-card {
+                        background-color: #2c3034;
+                        color: #ff8975;
+                        border-radius: 6px;
+                        padding: 3px !important;        # Reduced padding
+                        font-size: 18px !important;     # Slightly smaller title
+                        text-align: center;
+                      }
+                - type: horizontal-stack
+                  cards:
+                    - type: custom:mushroom-template-card
+                      primary: Diesel
+                      secondary: '{{ states(''sensor.dg_diesel_consumption_monthly'') }} L'
+                      icon: mdi:gas-station
+                      icon_color: blue
+                      layout: vertical
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background-color: #2c3034;
+                            border-radius: 6px;
+                            padding: 3px !important;   # Reduced internal padding
+                            --card-primary-font-size: 14px;
+                            --card-secondary-font-size: 12px;
+                            --icon-size: 18px;         # Slightly smaller icon
+                          }
+                    - type: custom:mushroom-template-card
+                      primary: Cost
+                      secondary: ₹{{ states('sensor.dg_diesel_cost_monthly') }}
+                      icon: mdi:currency-inr
+                      icon_color: green
+                      layout: vertical
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background-color: #2c3034;
+                            border-radius: 6px;
+                            padding: 3px !important;
+                            --card-primary-font-size: 13px;
+                            --card-secondary-font-size: 9px;
+                            --icon-size: 18px;
+                          }
+                    - type: custom:mushroom-template-card
+                      primary: Energy
+                      secondary: '{{ states(''sensor.dg_monthly_energy'') }} kWh'
+                      icon: mdi:flash
+                      icon_color: orange
+                      layout: vertical
+                      card_mod:
+                        style: |
+                          ha-card {
+                            background-color: #2c3034;
+                            border-radius: 6px;
+                            padding: 3px !important;
+                            --card-primary-font-size: 13px;
+                            --card-secondary-font-size: 9px;
+                            --icon-size: 18px;
+                          }
+            grid_options:
+              columns: 8.7
+              rows: 2.5
+          - type: gauge
+            entity: sensor.total_kw
+            unit: kW
+            min: 0
+            max: 10
+            needle: true
+            severity:
+              green: 0
+              yellow: 5
+              red: 5
+            name: Power
+            card_mod:
+              style: |
+                ha-card {
+                  background-color: #1c1c1c;
+                }
+            grid_options:
+              columns: 6
+              rows: 2
+          - type: gauge
+            entity: sensor.selec_average_voltage_l_n
+            name: Voltage
+            unit: V
+            min: 200
+            max: 255
+            needle: true
+            severity:
+              green: 0
+              yellow: 250
+              red: 250
+            grid_options:
+              columns: 6
+              rows: 2
+            card_mod:
+              style: |
+                ha-card {
+                  background-color:#1c1c1c;
+                }
+          - type: gauge
+            entity: sensor.selec_average_current
+            name: Current
+            unit: A
+            min: 0
+            max: 30
+            needle: true
+            severity:
+              green: 0
+              yellow: 25
+              red: 25
+            card_mod:
+              style: |
+                ha-card {
+                  background-color: #1c1c1c;
+                }
+            grid_options:
+              columns: 6
+              rows: 2
+          - type: vertical-stack
+            cards:
+              - type: conditional
+                conditions:
+                  - condition: numeric_state
+                    entity: sensor.total_kw
+                    above: 5
+                card:
+                  type: vertical-stack
+                  cards:
+                    - type: markdown
+                      content: >
+                        ⚠️ **High Power Usage Alert!**   Power usage is above 1
+                        kW.   It seems most appliances are ON.   Please turn off
+                        unused appliances.
+                    - type: custom:button-card
+                      entity: sensor.total_kw
+                      name: Power Alert
+                      icon: mdi:power-plug
+                      show_state: true
+                      state:
+                        - operator: '>'
+                          value: 5
+                          styles:
+                            card:
+                              - animation: blink 1s ease-in-out infinite
+                              - background-color: red
+                              - color: white
+                              - font-weight: bold
+                            name:
+                              - color: white
+                            state:
+                              - color: white
+                      styles:
+                        card:
+                          - font-size: 16px
+                          - padding: 12px
+                          - border-radius: 12px
+                          - justify-content: center
+                          - align-items: center
+                        icon:
+                          - width: 24px
+                        name:
+                          - font-weight: bold
+                          - font-size: 16px
+                        state:
+                          - font-size: 14px
+            grid_options:
+              columns: 6
+              rows: 1
+          - type: vertical-stack
+            cards:
+              - type: conditional
+                conditions:
+                  - condition: numeric_state
+                    entity: sensor.selec_average_voltage_l_n
+                    above: 260
+                card:
+                  type: vertical-stack
+                  cards:
+                    - type: custom:button-card
+                      entity: sensor.selec_average_voltage_l_n
+                      name: High Voltage Alert
+                      icon: mdi:flash-alert
+                      show_state: true
+                      state:
+                        - value: 260
+                          operator: '>'
+                          styles:
+                            card:
+                              - animation: blink 1s ease-in-out infinite
+                              - background-color: red
+                              - color: white
+                              - font-weight: bold
+                            name:
+                              - color: white
+                            state:
+                              - color: white
+                      styles:
+                        card:
+                          - font-size: 16px
+                          - padding: 12px
+                        icon:
+                          - width: 24px
+                        name:
+                          - font-weight: bold
+                          - font-size: 16px
+                        state:
+                          - font-size: 14px
+              - type: conditional
+                conditions:
+                  - condition: numeric_state
+                    entity: sensor.selec_average_voltage_l_n
+                    below: 210
+                card:
+                  type: vertical-stack
+                  cards:
+                    - type: custom:button-card
+                      entity: sensor.selec_average_voltage_l_n
+                      name: Low Voltage Alert
+                      icon: mdi:flash-alert
+                      show_state: true
+                      state:
+                        - value: 210
+                          operator: <
+                          styles:
+                            card:
+                              - animation: blink 1s ease-in-out infinite
+                              - background-color: blue
+                              - color: white
+                              - font-weight: bold
+                            name:
+                              - color: white
+                            state:
+                              - color: white
+                      styles:
+                        card:
+                          - font-size: 16px
+                          - padding: 12px
+                        icon:
+                          - width: 24px
+                        name:
+                          - font-weight: bold
+                          - font-size: 16px
+                        state:
+                          - font-size: 14px
+            grid_options:
+              columns: 6
+              rows: 1
+          - type: conditional
+            conditions:
+              - condition: numeric_state
+                entity: sensor.selec_average_current
+                above: 25
+            card:
+              type: vertical-stack
+              cards:
+                - type: custom:button-card
+                  entity: sensor.selec_average_current
+                  name: Current Alert
+                  icon: mdi:current-ac
+                  show_state: true
+                  state:
+                    - value: 25
+                      operator: '>'
+                      styles:
+                        card:
+                          - animation: blink 1s ease-in-out infinite
+                          - background-color: red
+                          - color: white
+                          - font-weight: bold
+                        name:
+                          - color: white
+                        state:
+                          - color: white
+                  styles:
+                    card:
+                      - font-size: 16px
+                      - padding: 12px
+                    icon:
+                      - width: 24px
+                    name:
+                      - font-weight: bold
+                      - font-size: 16px
+                    state:
+                      - font-size: 14px
+            grid_options:
+              columns: 6
+              rows: 1
+        column_span: 3
+      - type: grid
+        cards: []
+        column_span: 3
+    type: sections
+    max_columns: 3
+    background:
+      opacity: 0
+      alignment: center
+      size: cover
+      repeat: repeat
+      attachment: fixed
+    cards: []
