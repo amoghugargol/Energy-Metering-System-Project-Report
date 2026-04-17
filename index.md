@@ -37,16 +37,16 @@ views:
     sections:
       - type: grid
         cards:
-          - type: picture-elements
-            elements:
-              - type: image
-                entity: light.aqara_smart_wall_switch_z1_pro_3
-                image: mr3fan
-                state_image:
-                  'on': /local/icons/fan_offf.png
-                  'off': /local/icons/fan_off.png
-                tap_action:
-                  action: toggle
+          - type: custom:mushroom-title-card
+            grid_options:
+              columns: 36
+              rows: 0.7
+          - type: vertical-stack
+            cards:
+              - type: custom:energy-period-selector-plus
+                card_background: false
+                today_button: true
+                prev_next_buttons: true
 .
 .
 
