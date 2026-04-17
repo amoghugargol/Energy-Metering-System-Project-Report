@@ -53,7 +53,7 @@ views:
 ---
 
 ## 📸 Dashboard
-![Dashboard Preview](images/dashboard.png)
+![Dashboard Preview](images/dashboard.png.jpg)
 
 ---
 
